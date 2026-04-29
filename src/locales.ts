@@ -44,7 +44,15 @@ export const translations = {
     locUniversity: "Сәтбаев Университеті",
     locMarket: "Орталық базар",
     locPalace: "Мәдениет сарайы",
-    locHospital: "Орталық аурухана"
+    locHospital: "Орталық аурухана",
+    municipalUpdate: "Қалалық жаңарту",
+    today: "Бүгін",
+    towards: "Бағыты",
+    launchMap: "Қала картасын ашу",
+    eventDate: "15 Мамыр",
+    eventTitle: "Қала марафоны 2026",
+    parkTitle: "Жаңа саябақтың ашылуы",
+    parkSummary: "Абай көшесінде құрылыс аяқталды."
   },
   ru: {
     home: "Главная",
@@ -88,7 +96,15 @@ export const translations = {
     locUniversity: "Университет им. Сатпаева",
     locMarket: "Центральный рынок",
     locPalace: "Дворец культуры",
-    locHospital: "Центральная больница"
+    locHospital: "Центральная больница",
+    municipalUpdate: "Городское обновление",
+    today: "Сегодня",
+    towards: "До",
+    launchMap: "Открыть карту города",
+    eventDate: "15 Мая",
+    eventTitle: "Городской Марафон 2026",
+    parkTitle: "Открытие нового парка",
+    parkSummary: "Строительство завершено на улице Абая."
   },
   en: {
     home: "Home",
@@ -132,6 +148,14 @@ export const translations = {
     locUniversity: "Satpayev University",
     locMarket: "Central Market",
     locPalace: "Zhezqazgan Palace of Culture",
-    locHospital: "Central Hospital"
+    locHospital: "Central Hospital",
+    municipalUpdate: "Municipal Update",
+    today: "Today",
+    towards: "To",
+    launchMap: "Launch Full Map Hub",
+    eventDate: "May 15",
+    eventTitle: "City Marathon 2026",
+    parkTitle: "New Park Opening",
+    parkSummary: "Construction finalized on Abay Street."
   }
 };

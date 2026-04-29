@@ -95,7 +95,7 @@ function TopBar() {
 
 export default function App() {
   const [isBotOpen, setIsBotOpen] = useState(false);
-  const { user, loading } = useAuth();
+  const { user, loading, signOut } = useAuth();
   const { t } = useLanguage();
 
   if (loading) return null;
@@ -178,7 +178,7 @@ export default function App() {
                   </div>
 
                   <Button 
-                    onClick={logout}
+                    onClick={signOut}
                     variant="outline"
                     className="w-full h-14 rounded-2xl border-slate-200 text-slate-600 hover:bg-red-50 hover:text-red-600 hover:border-red-100 transition-all font-bold"
                   >

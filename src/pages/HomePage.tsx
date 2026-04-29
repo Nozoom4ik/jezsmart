@@ -130,11 +130,11 @@ export default function HomePage() {
                   <div className="flex items-center gap-4">
                     <div className="bg-white h-10 px-3 flex items-center justify-center rounded-xl border border-slate-200 font-black text-slate-800 shadow-sm">{route.number}</div>
                     <div>
-                      <div className="text-xs font-bold text-slate-800">{language === 'en' ? 'To' : 'До'}: {route.to}</div>
+                      <div className="text-xs font-bold text-slate-800">{t.towards}: {route.to}</div>
                       <div className="flex items-center gap-1.5 mt-0.5">
                         <div className={`w-1.5 h-1.5 rounded-full ${route.status === 'on_time' ? 'bg-emerald-500' : 'bg-amber-500'}`} />
                         <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">
-                          {route.status === 'on_time' ? (language === 'en' ? 'On Schedule' : 'По расписанию') : (language === 'en' ? 'Delayed' : 'Задерживается')}
+                          {route.status === 'on_time' ? (language === 'en' ? 'On Schedule' : language === 'ru' ? 'По расписанию' : 'Кесте бойынша') : (language === 'en' ? 'Delayed' : language === 'ru' ? 'Задерживается' : 'Кешігуде')}
                         </span>
                       </div>
                     </div>
@@ -146,7 +146,7 @@ export default function HomePage() {
                 </div>
               ))}
               <Button onClick={() => navigate('/map')} variant="ghost" className="w-full h-12 text-slate-500 font-bold text-xs uppercase tracking-widest rounded-xl hover:bg-slate-50 mt-2">
-                {language === 'en' ? 'Launch Full Map Hub' : 'Открыть карту города'}
+                {t.launchMap}
               </Button>
             </CardContent>
           </Card>
@@ -164,14 +164,14 @@ export default function HomePage() {
             <div className="flex-1">
               <TabsContent value="official" className="mt-0 space-y-4">
                 {[
-                    { id: 1, title: language === 'en' ? 'New Park Opening' : language === 'ru' ? 'Открытие нового парка' : 'Жаңа саябақтың ашылуы', summary: language === 'en' ? 'Construction finalized on Abay Street.' : 'Строительство завершено на улице Абая.', category: 'official' }
+                    { id: 1, title: t.parkTitle, summary: t.parkSummary, category: 'official' }
                 ].map(news => (
                   <div key={news.id} className="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 group hover:border-slate-300 transition-all cursor-pointer" onClick={() => window.alert(t.comingSoon)}>
                     <div className="flex items-center justify-between mb-3">
                        <Badge className={news.category === 'alert' ? 'bg-red-50 text-red-600 border-none shadow-none font-bold uppercase tracking-widest text-[9px]' : 'bg-slate-100 text-slate-600 border-none shadow-none font-bold uppercase tracking-widest text-[9px]'}>
-                        {language === 'en' ? 'Municipal Update' : 'Городское обновление'}
+                        {t.municipalUpdate}
                        </Badge>
-                       <span className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">{language === 'en' ? 'Today' : 'Сегодня'}</span>
+                       <span className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">{t.today}</span>
                     </div>
                     <h3 className="text-sm font-bold text-slate-800 leading-snug group-hover:text-blue-600 transition-colors">{news.title}</h3>
                     <p className="text-xs text-slate-500 mt-2 line-clamp-2 leading-relaxed">{news.summary}</p>
@@ -183,8 +183,8 @@ export default function HomePage() {
                 <div className="relative aspect-[4/3] rounded-2xl overflow-hidden group shadow-lg border border-slate-200 cursor-pointer" onClick={() => window.alert(t.comingSoon)}>
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/20 to-transparent z-10" />
                   <div className="absolute bottom-0 left-0 p-5 z-20">
-                    <div className="text-[10px] font-black text-blue-400 uppercase tracking-[0.2em] mb-2">{language === 'en' ? 'May 15' : '15 Мая'}</div>
-                    <h3 className="text-base font-bold text-white leading-tight">{language === 'en' ? 'City Marathon 2026' : 'Городской Марафон 2026'}</h3>
+                    <div className="text-[10px] font-black text-blue-400 uppercase tracking-[0.2em] mb-2">{t.eventDate}</div>
+                    <h3 className="text-base font-bold text-white leading-tight">{t.eventTitle}</h3>
                     <button className="flex items-center gap-1.5 text-[10px] font-black text-white/60 uppercase tracking-widest mt-3 group-hover:text-white transition-colors">
                       {t.learnMore} <ArrowRight size={12} />
                     </button>
