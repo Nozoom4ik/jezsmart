@@ -1,0 +1,108 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 0. Default Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- Global Helpers ---
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isEmailVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isAdmin() {
+      // Hardcoded admin for initial setup and check if role is set in user doc
+      return isSignedIn() && (
+        request.auth.token.email == 'baltabek_n@mail.ru' ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.roles.hasAny(['admin'])
+      );
+    }
+
+    // --- Entity Validations ---
+
+    function isValidUser(data) {
+      return data.uid == request.auth.uid
+        && data.email is string && data.email.size() <= 100
+        && data.displayName is string && data.displayName.size() <= 100
+        && data.points is int && data.points >= 0
+        && data.roles is list && data.roles.size() <= 5;
+    }
+
+    function isValidBusRoute(data) {
+      return data.routeId is string && data.routeId.size() <= 64
+        && data.number is string && data.number.size() <= 10
+        && data.status in ['on_time', 'delayed', 'cancelled'];
+    }
+
+    function isValidPetition(data) {
+      return data.id is string && data.id.size() <= 64
+        && data.title is string && data.title.size() <= 200
+        && data.description is string && data.description.size() <= 5000
+        && data.authorId == request.auth.uid
+        && data.status in ['pending', 'under_review', 'implemented']
+        && data.votes is int && data.votes >= 0;
+    }
+
+    // --- Collection Rules ---
+
+    match /users/{userId} {
+      allow get: if isSignedIn();
+      allow list: if isAdmin();
+      allow create: if isEmailVerified() && isValidUser(incoming()) 
+                     && incoming().uid == userId
+                     && incoming().points == 0
+                     && incoming().roles.size() == 0; // Prevent self-elevated roles
+      allow update: if isEmailVerified() && isOwner(userId) && isValidUser(incoming())
+                     && (
+                       // Regular updates: only non-PII, non-role fields
+                       incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'avatar']) ||
+                       isAdmin()
+                     );
+    }
+
+    match /routes/{routeId} {
+      allow read: if true; // Public transport info
+      allow write: if isAdmin() && isValidBusRoute(incoming());
+    }
+
+    match /petitions/{petitionId} {
+      allow read: if true;
+      allow create: if isEmailVerified() && isValidPetition(incoming())
+                     && incoming().id == petitionId
+                     && incoming().status == 'pending'
+                     && incoming().votes == 0;
+      allow update: if isEmailVerified() && (
+        // Action: Vote
+        (incoming().diff(existing()).affectedKeys().hasOnly(['votes']) 
+         && incoming().votes == existing().votes + 1) ||
+        // Action: Admin Status Update
+        (isAdmin() && incoming().diff(existing()).affectedKeys().hasOnly(['status'])) ||
+        // Action: Edit (Owner)
+        (isOwner(existing().authorId) && existing().status == 'pending' 
+         && incoming().diff(existing()).affectedKeys().hasOnly(['title', 'description']))
+      );
+      allow delete: if isAdmin() || (isOwner(existing().authorId) && existing().status == 'pending');
+    }
+  }
+}

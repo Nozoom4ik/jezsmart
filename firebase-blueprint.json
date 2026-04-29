@@ -1,0 +1,60 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "A Zhezqazgan resident or city official.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "displayName": { "type": "string" },
+        "email": { "type": "string" },
+        "points": { "type": "integer" },
+        "roles": { "type": "array", "items": { "type": "string" } },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "points"]
+    },
+    "BusRoute": {
+      "title": "Bus Route",
+      "description": "Public transport route information.",
+      "type": "object",
+      "properties": {
+        "routeId": { "type": "string" },
+        "number": { "type": "string" },
+        "origin": { "type": "string" },
+        "destination": { "type": "string" },
+        "status": { "type": "string", "enum": ["on_time", "delayed", "cancelled"] }
+      },
+      "required": ["routeId", "number"]
+    },
+    "Petition": {
+      "title": "Petition",
+      "description": "Citizen request for urban improvement.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "authorId": { "type": "string" },
+        "votes": { "type": "integer" },
+        "status": { "type": "string", "enum": ["pending", "under_review", "implemented"] },
+        "category": { "type": "string" }
+      },
+      "required": ["id", "title", "authorId", "status"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles and rewards."
+    },
+    "/routes/{routeId}": {
+      "schema": "BusRoute",
+      "description": "Public bus routes and tracking data."
+    },
+    "/petitions/{petitionId}": {
+      "schema": "Petition",
+      "description": "Citizen petitions and urban feedback."
+    }
+  }
+}

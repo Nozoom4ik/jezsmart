@@ -1,0 +1,13 @@
+{
+  "name": "JezSmart",
+  "description": "A smart city ecosystem for Zhezqazgan, digitizing urban management, transport tracking, and citizen-authority communication.",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "Real-time Transport Tracking",
+    "Smart City Services Integration",
+    "AI Urban Assistant",
+    "Civic Gamification"
+  ]
+}
